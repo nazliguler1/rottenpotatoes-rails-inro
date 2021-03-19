@@ -9,8 +9,8 @@ class MoviesController < ApplicationController
   def index
     #@movies = Movie.all
     #Examine params and session hash
-    #update_session_hash
-    #render or redirect
+    update_session_hash
+    render_or_redirect
     #determine_highlight
     @all_ratings = Movie.all_ratings
     @selected_ratings_hash = selected_ratings_hash
@@ -62,16 +62,24 @@ class MoviesController < ApplicationController
     Hash[Movie.all_ratings.map{|rating| [rating, "1"]}]
   end 
   def selected_ratings_hash
-    params[:ratings] || ratings_all_hash 
+    session[:ratings] || ratings_all_hash 
   end
   def sort_field
-    params[:order] || :id
+    session[:order] || :id
   end
   def determine_highlight
     @highlight = {:id => "", :title => "", :release_date => "" }
-    @highlight[@sort_field] = "bg-warning hilite"
+    @highlight [session[:order]] = "bg-warning hilite"
   end
   def update_session_hash
-    session[:ratings] = params[:ratings] || session[:ratings] || ratings_all_hash 
+    session[:ratings] = params[:ratings] || session[:ratings] || ratings_all_hash
+    session[:order] = params[:order] || session[:order] || :id
+  end
+  def render_or_redirect
+    return unless (session[:ratings] and params[:ratings].nil?) or 
+                  (session[:order] and params[:order].nil?)
+    flash.keep
+    redirect_to movies_path(:ratings => session[:ratings], :order => session[:order]) and return
+    
   end
 end
