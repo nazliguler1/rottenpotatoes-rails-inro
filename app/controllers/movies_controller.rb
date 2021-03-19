@@ -11,8 +11,10 @@ class MoviesController < ApplicationController
     @all_ratings = Movie.all_ratings
     @selected_ratings_hash = selected_ratings_hash
     @selected_ratings = selected_ratings
-    @movies = Movie.filter_movies(@selected_ratings)
-   
+    @sort_field = sort_field
+    determine_highlight
+    @movies = Movie.filter_and_sort_movies(@selected_ratings, @sort_field)
+    p @movies
   end
 
   def new
@@ -49,16 +51,20 @@ class MoviesController < ApplicationController
   def movie_params
     params.require(:movie).permit(:title, :rating, :description, :release_date)
   end
-  
   def selected_ratings
-    @selected_ratings_hash.keys
+    @selected_ratings_hash&.keys
   end
-    
   def ratings_all_hash
-    Hash[Movie.all_ratings.map {|rating| [rating, "1"]}]
-    
-  end
-  def selected_ratings_hash
-    params[:ratings] || ratings_all_hash
+    Hash[Movie.all_ratings.map{|rating| [rating, "1"]}]
   end 
+  def selected_ratings_hash
+    params[:ratings] || ratings_all_hash 
+  end
+  def sort_field
+    params[:order] || :id
+  end
+  def determine_highlight
+    @highlight = {:id => "", :title => "", :release_date => "" }
+    @highlight[@sort_field] = "bg-warning hilite"
+  end
 end

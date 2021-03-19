@@ -5,8 +5,8 @@ class Movie < ActiveRecord::Base
     
    
   end 
-  def self.filter_movies(selected_ratings)
-    Movie.where(:rating => selected_ratings)
+  def self.filter_and_sort_movies(selected_ratings, sort_field)
+    Movie.where(:rating => selected_ratings).order(sort_field)
     
   end
 end
