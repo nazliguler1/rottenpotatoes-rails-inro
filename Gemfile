@@ -11,7 +11,9 @@ gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
-
+# Use Haml as the templating library
+gem 'haml'
+gem 'haml-rails', '~> 1.0.0'
 
 # Use Unicorn as the app server
 # gem 'unicorn'
@@ -30,7 +32,7 @@ group :development, :test do
   gem 'guard-rspec'
 
   # Use sqlite3 as the database for Active Record
-  gem 'sqlite3'
+  gem 'sqlite3', '~> 1.3.0'
 
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'
