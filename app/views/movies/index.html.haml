@@ -1,6 +1,16 @@
 / This file is app/views/movies/index.html.erb
 %h2 All Movies
+
+= form_tag movies_path, method: :get, id: 'ratings_form' do
+  Include:
+  - @all_ratings.each do |rating|
+    .form-check.form-check-inline
+      = label_tag "ratings[#{rating}]", rating, class: 'form-check-label'
+      = check_box_tag "ratings[#{rating}]", "1",  @selected_ratings.include?(rating), class: 'form-check-input'
+  = submit_tag 'Refresh', id: 'ratings_submit', class: 'btn btn-primary'
+  
 %table#movies.table.table-striped.col-md-12
+
   %thead
     %tr
       %th Movie Title
